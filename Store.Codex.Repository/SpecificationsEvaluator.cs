@@ -8,31 +8,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Store.Codex.Repository.Repositories
+namespace Store.Codex.Repository
 {
-    public class SpecificationsEvaluator<TEntity,Tkey> where TEntity : BaseEntity<Tkey>
+    public class SpecificationsEvaluator<TEntity, Tkey> where TEntity : BaseEntity<Tkey>
     {
         // Create And Return Qeury
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery,ISpecification<TEntity,Tkey> spec) // inputQuery here is like _context.Products
+        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity, Tkey> spec) // inputQuery here is like _context.Products
         {
             var query = inputQuery;
 
-            if(spec.Criteria is not null)
+            if (spec.Criteria is not null)
             {
                 query = query.Where(spec.Criteria);
             }
 
-            if(spec.OrderBy is not null)
+            if (spec.OrderBy is not null)
             {
                 query = query.OrderBy(spec.OrderBy);
             }
 
-            if(spec.OrderByDescending is not null)
+            if (spec.OrderByDescending is not null)
             {
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
 
-            if(spec.IsPaginationEnabled)
+            if (spec.IsPaginationEnabled)
             {
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }
@@ -45,7 +45,7 @@ namespace Store.Codex.Repository.Repositories
 
             query = spec.Includes.Aggregate(query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression)); // it concatenates the includes in the Includes Attribute with the query string
 
-            
+
 
             return query;
         }
